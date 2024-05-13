@@ -3,8 +3,9 @@ package user
 import (
 	"net/http"
 
+	"Ozinshe_restart/internal/models"
+
 	"github.com/gin-gonic/gin"
-	"github.com/username/GitRepoName/internal/models"
 )
 
 type UserController struct {

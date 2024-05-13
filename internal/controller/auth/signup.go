@@ -2,20 +2,20 @@ package auth
 
 import (
 	"fmt"
-	"log"
-	"math/rand"
 	"net/http"
-	"regexp"
 	"unicode"
 
+	"Ozinshe_restart/internal/controller/tokenutil"
+	"Ozinshe_restart/internal/models"
+
 	"github.com/gin-gonic/gin"
-	"github.com/username/GitRepoName/internal/controller/tokenutil"
-	"github.com/username/GitRepoName/internal/models"
 	"golang.org/x/crypto/bcrypt"
 )
 
 type AuthController struct {
-	UserRepository models.UserRepository
+	UserRepository        models.UserRepository
+	AccessTokenSecret     string
+	AccessTokenExpiryHour int
 }
 
 func (uc *AuthController) Signup(c *gin.Context) {
@@ -98,7 +98,7 @@ func (uc *AuthController) Signup(c *gin.Context) {
 		})
 		return
 	}
-	accessToken, err := tokenutil.CreateAccessToken(&user, uc.Env.AccessTokenSecret, uc.Env.AccessTokenExpiryHour)
+	accessToken, err := tokenutil.CreateAccessToken(&user, uc.AccessTokenSecret, uc.AccessTokenExpiryHour)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, models.ErrorResponse{
 			Result: []models.ErrorDetail{

@@ -3,9 +3,10 @@ package middleware
 import (
 	"net/http"
 
+	"Ozinshe_restart/internal/controller/tokenutil"
+	models "Ozinshe_restart/internal/models"
+
 	"github.com/gin-gonic/gin"
-	"github.com/username/GitRepoName/internal/controller/tokenutil"
-	models "github.com/username/GitRepoName/internal/models"
 )
 
 func JWTAuth(secret string) gin.HandlerFunc {

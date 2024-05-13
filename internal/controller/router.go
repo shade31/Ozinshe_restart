@@ -1,17 +1,25 @@
 package controller
 
 import (
-	"github.com/gin-gonic/gin"
-	"github.com/username/GitRepoName/middleware"
-	"github.com/username/GitRepoName/pkg"
+	"Ozinshe_restart/middleware"
+	"Ozinshe_restart/pkg"
+	"os"
 
-	"github.com/username/GitRepoName/internal/controller/auth"
-	"github.com/username/GitRepoName/internal/controller/user"
-	"github.com/username/GitRepoName/internal/repository"
+	"github.com/gin-gonic/gin"
+
+	"Ozinshe_restart/internal/controller/auth"
+	"Ozinshe_restart/internal/controller/user"
+	"Ozinshe_restart/internal/repository"
 )
 
+var AccessTokenSecret string
+
+const AccessTokenExpiryHour = 24
+
 func Setup(app pkg.Application, router *gin.Engine) {
-	db := app.Pql
+	AccessTokenSecret := os.Getenv("ACCESS_TOKEN_SECRET")
+
+	db := app.DB
 
 	loginController := &auth.AuthController{
 		UserRepository: repository.NewUserRepository(db),
@@ -24,7 +32,7 @@ func Setup(app pkg.Application, router *gin.Engine) {
 	router.POST("/signup", loginController.Signup)
 	router.POST("/signin", loginController.Signin)
 
-	router.Use(middleware.JWTAuth(env.AccessTokenSecret))
+	router.Use(middleware.JWTAuth(AccessTokenSecret))
 
 	userRouter := router.Group("/user")
 	{

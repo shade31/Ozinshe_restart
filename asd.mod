@@ -1,4 +1,4 @@
-module Ozinshe_restart
+module github.com/shade31/Ozinshe_restart
 
 go 1.20
 

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	models "github.com/username/GitRepoName/internal/models"
+	models "Ozinshe_restart/internal/models"
 
 	"errors"
 	"strings"

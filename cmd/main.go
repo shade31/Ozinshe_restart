@@ -3,11 +3,12 @@ package main
 import (
 	"fmt"
 	"log"
-	"net/http"
+	"os"
+
+	"Ozinshe_restart/internal/controller"
+	"Ozinshe_restart/pkg"
 
 	"github.com/gin-gonic/gin"
-	"github.com/username/GitRepoName/internal/controller"
-	"github.com/username/GitRepoName/pkg"
 )
 
 func main() {
@@ -16,11 +17,16 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer app.CloseDBConnection()
+	db, err := pkg.ConnectDatabase()
+	if err != nil {
+		panic(err)
+	}
+	defer db.Close()
 
 	ginRouter := gin.Default()
-	
+
 	controller.Setup(app, ginRouter)
 
-	ginRouter.Run(fmt.Sprintf(":%s", app.Env.PORT))
+	PORT := os.Getenv("PORT")
+	ginRouter.Run(fmt.Sprintf(":%s", PORT))
 }

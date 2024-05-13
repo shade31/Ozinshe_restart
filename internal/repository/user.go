@@ -4,8 +4,9 @@ import (
 	"context"
 	"time"
 
+	"Ozinshe_restart/internal/models"
+
 	"github.com/jackc/pgx/v4/pgxpool"
-	"github.com/username/GitRepoName/internal/models"
 )
 
 type UserRepository struct {
