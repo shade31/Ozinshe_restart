@@ -1,20 +1,25 @@
 package models
 
-import "context"
+import (
+	"context"
+	"time"
+)
 
 type User struct {
-	ID          uint   `json:"id"`
-	Email       string `json:"email"`
-	Password    string `json:"password,omitempty"`
-	PhoneNumber string `json:"phoneNumber"`
-	RoleID      uint   `json:"roleId"`
-	CreatedAt   string `json:"createdAt"`
+	Id         uint      `json:"-" db:"id"`
+	Email      string    `json:"email"`
+	Password   string    `json:"password"`
+	Name       string    `json:"name"`
+	Birthdate  string    `json:"birthdate"`
+	Phone      string    `json:"phone"`
+	Created_at time.Time `json:"created_at"`
+	Deleted_at string    `json:"deleted_at"`
+	Is_admin   bool      `json:"is_admin"`
 }
 
 type UserRequest struct {
-	Email       string `json:"email"`
-	Password    string `json:"password"`
-	PhoneNumber string `json:"phoneNumber"`
+	Email    string `json:"email"`
+	Password string `json:"password"`
 }
 
 type LoginRequest struct {

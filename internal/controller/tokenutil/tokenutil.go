@@ -16,8 +16,7 @@ import (
 func CreateAccessToken(user *models.User, secret string, expiry int) (accessToken string, err error) {
 	exp := time.Now().Add(time.Hour * time.Duration(expiry))
 	claims := &models.JwtClaims{
-		ID:     user.ID,
-		RoleID: user.RoleID,
+		ID: user.Id,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(exp),
 		},
@@ -33,7 +32,7 @@ func CreateAccessToken(user *models.User, secret string, expiry int) (accessToke
 
 func CreateRefreshToken(user *models.User, secret string, expiry int) (refreshToken string, err error) {
 	claimsRefresh := &models.JwtRefreshClaims{
-		ID: user.ID,
+		ID: user.Id,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour * time.Duration(expiry))),
 		},
@@ -50,6 +49,7 @@ func CreateRefreshToken(user *models.User, secret string, expiry int) (refreshTo
 
 func ValidateJWT(c *gin.Context, secret string) error {
 	token, err := getToken(c, secret)
+	fmt.Println(token)
 	if err != nil {
 		return err
 	}
@@ -66,11 +66,9 @@ func ValidateUserJWT(c *gin.Context, secret string) error {
 		return err
 	}
 	claims, ok := token.Claims.(jwt.MapClaims)
-	userRoleID := uint(claims["role"].(float64))
 	userID := uint(claims["id"].(float64))
 	if ok && token.Valid {
 		c.Set("userID", userID)
-		c.Set("roleID", userRoleID)
 		return nil
 	}
 	return errors.New("invalid curator token provided")
@@ -78,6 +76,7 @@ func ValidateUserJWT(c *gin.Context, secret string) error {
 
 func getToken(c *gin.Context, secret string) (*jwt.Token, error) {
 	tokenString := getTokenFromRequest(c)
+	fmt.Println(tokenString)
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])

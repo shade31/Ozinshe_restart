@@ -34,7 +34,7 @@ func (uc *AuthController) Signup(c *gin.Context) {
 	}
 
 	user, _ := uc.UserRepository.GetUserByEmail(c, request.Email)
-	if user.ID > 0 {
+	if user.Id > 0 {
 		c.JSON(http.StatusBadRequest, models.ErrorResponse{
 			Result: []models.ErrorDetail{
 				{

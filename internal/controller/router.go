@@ -22,7 +22,9 @@ func Setup(app pkg.Application, router *gin.Engine) {
 	db := app.DB
 
 	loginController := &auth.AuthController{
-		UserRepository: repository.NewUserRepository(db),
+		UserRepository:        repository.NewUserRepository(db),
+		AccessTokenSecret:     AccessTokenSecret,
+		AccessTokenExpiryHour: AccessTokenExpiryHour,
 	}
 
 	userController := &user.UserController{
