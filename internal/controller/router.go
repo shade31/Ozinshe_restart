@@ -39,6 +39,8 @@ func Setup(app pkg.Application, router *gin.Engine) {
 	userRouter := router.Group("/user")
 	{
 		userRouter.GET("/profile", userController.GetProfile)
+		userRouter.PATCH("/updateProfile", userController.UpdateProfile)
+		userRouter.PATCH("/changePassword", userController.ChangePassword)
 	}
 
 }

@@ -22,6 +22,10 @@ type UserRequest struct {
 	Password string `json:"password"`
 }
 
+type UserIDResponse struct {
+	Id uint `json:"id"`
+}
+
 type LoginRequest struct {
 	Email    string `json:"email"`
 	Password string `json:"password"`
@@ -36,6 +40,7 @@ type UserRepository interface {
 	GetUserByEmail(c context.Context, email string) (User, error)
 	GetUserByID(c context.Context, userID int) (User, error)
 	GetProfile(c context.Context, userID int) (User, error)
-
+	UpdateProfile(c context.Context, userID int, u User) (User, error)
+	ChangePassword(c context.Context, userID int, p Password) (UserIDResponse, error)
 	CreateUser(c context.Context, user UserRequest) (int, error)
 }

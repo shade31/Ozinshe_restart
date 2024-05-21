@@ -8,6 +8,7 @@ import (
 	"Ozinshe_restart/internal/models"
 
 	"github.com/jackc/pgx/v4/pgxpool"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type UserRepository struct {
@@ -70,4 +71,47 @@ func (ur *UserRepository) GetProfile(c context.Context, userID int) (models.User
 	}
 
 	return user, nil
+}
+
+func (ur *UserRepository) UpdateProfile(c context.Context, userID int, user models.User) (models.User, error) {
+	updatedUser := models.User{}
+
+	query := `Update users set email = $2, name = $3, phone = $4, birthdate = $5 where id = $1 returning id, email, name, phone, birthdate`
+
+	var (
+		id        int
+		email     string
+		name      string
+		phone     string
+		birthdate string
+	)
+	err := ur.db.QueryRow(c, query, userID, user.Email, user.Name, user.Phone, user.Birthdate).Scan(&id, &email, &name, &phone, &birthdate)
+	if err != nil {
+		return updatedUser, err
+	}
+
+	updatedUser = models.User{
+		Id:        uint(id),
+		Email:     email,
+		Name:      name,
+		Phone:     phone,
+		Birthdate: birthdate,
+	}
+
+	return updatedUser, nil
+}
+
+func (ur *UserRepository) ChangePassword(c context.Context, userID int, p models.Password) (models.UserIDResponse, error) {
+	var response models.UserIDResponse
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(p.Password), bcrypt.DefaultCost)
+	if err != nil {
+		return response, fmt.Errorf("error hashing password: %w", err)
+	}
+
+	query := `Update users set password = $2 where id = $1 returning id`
+	err = ur.db.QueryRow(c, query, userID, string(hashedPassword)).Scan(&response.Id)
+	if err != nil {
+		return models.UserIDResponse{}, err
+	}
+	return response, nil
 }
