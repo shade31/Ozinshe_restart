@@ -1,10 +1,9 @@
 package user
 
 import (
+	"Ozinshe_restart/internal/controller/auth"
 	"Ozinshe_restart/internal/models"
-	"fmt"
 	"net/http"
-	"unicode"
 
 	"github.com/gin-gonic/gin"
 )
@@ -28,7 +27,7 @@ func (sc *UserController) ChangePassword(c *gin.Context) {
 	}
 
 	//Validate password
-	if err := validatePassword(password.Password); err != nil {
+	if err := auth.ValidatePassword(password.Password); err != nil {
 		c.JSON(http.StatusBadRequest, models.ErrorResponse{
 			Result: []models.ErrorDetail{
 				{
@@ -40,6 +39,7 @@ func (sc *UserController) ChangePassword(c *gin.Context) {
 		return
 	}
 
+	//ChangePassword
 	response, err := sc.UserRepository.ChangePassword(c, int(userID), password)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, models.ErrorResponse{
@@ -58,29 +58,4 @@ func (sc *UserController) ChangePassword(c *gin.Context) {
 
 	c.JSON(http.StatusOK, models.SuccessResponse{Result: response})
 
-}
-
-func validatePassword(password string) error {
-	if len(password) < 8 {
-		return fmt.Errorf("password must be at least 8 characters long")
-	}
-
-	var (
-		hasUpper, hasLower, hasDigit bool
-	)
-
-	for _, char := range password {
-		switch {
-		case unicode.IsUpper(char):
-			hasUpper = true
-		case unicode.IsLower(char):
-			hasLower = true
-		case unicode.IsDigit(char):
-			hasDigit = true
-		}
-	}
-	if !hasUpper || !hasLower || !hasDigit {
-		return fmt.Errorf("password must contain at least one uppercase letter, one lowercase letter and one digit")
-	}
-	return nil
 }

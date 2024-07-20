@@ -45,7 +45,7 @@ func (uc *AuthController) Signup(c *gin.Context) {
 		})
 		return
 	}
-	err := validatePassword(request.Password)
+	err := ValidatePassword(request.Password)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, models.ErrorResponse{
 			Result: []models.ErrorDetail{
@@ -112,7 +112,8 @@ func (uc *AuthController) Signup(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, models.SuccessResponse{Result: accessToken})
 }
-func validatePassword(password string) error {
+
+func ValidatePassword(password string) error {
 	if len(password) < 8 {
 		return fmt.Errorf("password must be at least 8 characters long")
 	}

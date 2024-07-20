@@ -37,7 +37,6 @@ func (lc *AuthController) Signin(c *gin.Context) {
 		})
 		return
 	}
-
 	user, err := lc.UserRepository.GetUserByEmail(c, loginRequest.Email)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, models.ErrorResponse{

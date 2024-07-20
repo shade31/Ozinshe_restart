@@ -103,6 +103,8 @@ func (ur *UserRepository) UpdateProfile(c context.Context, userID int, user mode
 
 func (ur *UserRepository) ChangePassword(c context.Context, userID int, p models.Password) (models.UserIDResponse, error) {
 	var response models.UserIDResponse
+
+	//GenerateHashPassword
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(p.Password), bcrypt.DefaultCost)
 	if err != nil {
 		return response, fmt.Errorf("error hashing password: %w", err)
