@@ -2,19 +2,18 @@ package models
 
 import (
 	"context"
-	"time"
 )
 
 type User struct {
-	Id         uint      `json:"-" db:"id"`
-	Email      string    `json:"email"`
-	Password   string    `json:"password"`
-	Name       string    `json:"name"`
-	Birthdate  string    `json:"birthdate"`
-	Phone      string    `json:"phone"`
-	Created_at time.Time `json:"created_at"`
-	Deleted_at string    `json:"deleted_at"`
-	Is_admin   bool      `json:"is_admin"`
+	Id         uint   `json:"-" db:"id"`
+	Email      string `json:"email"`
+	Password   string `json:"password"`
+	Name       string `json:"name"`
+	Birthdate  string `json:"birthdate"`
+	Phone      string `json:"phone"`
+	Created_at string `json:"created_at"`
+	Deleted_at string `json:"deleted_at"`
+	Is_admin   bool   `json:"is_admin"`
 }
 
 type UserRequest struct {
@@ -43,4 +42,19 @@ type UserRepository interface {
 	UpdateProfile(c context.Context, userID int, u User) (User, error)
 	ChangePassword(c context.Context, userID int, p Password) (UserIDResponse, error)
 	CreateUser(c context.Context, user UserRequest) (int, error)
+}
+
+type Genre struct {
+	Id         uint   `json:"id" db:"id"`
+	Name       string `json:"name"`
+	Created_at string `json:"created_at"`
+	Deleted_at string `json:"deleted_at"`
+}
+
+type GenreRepository interface {
+	GetAllGenres(c context.Context) ([]Genre, error)
+	GetGenreByID(c context.Context, genreID int) (Genre, error)
+	CreateGenre(c context.Context, genre Genre) (int, error)
+	UpdateGenre(c context.Context, genreID int, g Genre) (Genre, error)
+	DeleteGenre(c context.Context, genreID int) (Genre, error)
 }
