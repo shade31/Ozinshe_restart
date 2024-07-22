@@ -36,6 +36,14 @@ func Setup(app pkg.Application, router *gin.Engine) {
 		GenreRepository: repository.NewGenreRepository(db),
 	}
 
+	ageController := &core.AgeController{
+		AgeRepository: repository.NewAgeRepository(db),
+	}
+
+	screenshotController := &core.ScreenshotController{
+		ScreenshotRepository: repository.NewScreenshotRepository(db),
+	}
+
 	router.POST("/signup", loginController.Signup)
 	router.POST("/signin", loginController.Signin)
 
@@ -55,6 +63,16 @@ func Setup(app pkg.Application, router *gin.Engine) {
 		coreRouter.GET("/genres/:genreID", genreController.GetGenreByID)
 		coreRouter.PATCH("/genres/:genreID", genreController.UpdateGenre)
 		coreRouter.DELETE("/genres/:genreID", genreController.DeleteGenre)
+
+		coreRouter.POST("/ages", ageController.CreateAge)
+		coreRouter.GET("/ages", ageController.GetAllAges)
+		coreRouter.GET("/ages/:ageID", ageController.GetAgeByID)
+		coreRouter.PATCH("/ages/:ageID", ageController.UpdateAge)
+		coreRouter.DELETE("/ages/:ageID", ageController.DeleteAge)
+
+		coreRouter.POST("/screenshot", screenshotController.CreateScreenshot)
+		coreRouter.GET("/screenshots/:screenshotID", screenshotController.GetScreenshotByID)
+		coreRouter.DELETE("/screenshots/:screenshotID", screenshotController.DeleteScreenshot)
 	}
 
 }

@@ -7,15 +7,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (ac *GenreController) GetAllGenres(c *gin.Context) {
+func (gc *AgeController) GetAllAges(c *gin.Context) {
 
-	genres, err := ac.GenreRepository.GetAllGenres(c)
+	ages, err := gc.AgeRepository.GetAllAges(c)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, models.ErrorResponse{
 			Result: []models.ErrorDetail{
 				{
-					Code:    "ERROR_GET_ALL_GENRES",
-					Message: "Can't get list of all genres from db",
+					Code:    "ERROR_GET_ALL_AGES",
+					Message: "Can't get list of all ages from db",
 					Metadata: models.Properties{
 						Properties1: err.Error(),
 					},
@@ -24,5 +24,5 @@ func (ac *GenreController) GetAllGenres(c *gin.Context) {
 		})
 		return
 	}
-	c.JSON(http.StatusOK, models.SuccessResponse{Result: genres})
+	c.JSON(http.StatusOK, models.SuccessResponse{Result: ages})
 }

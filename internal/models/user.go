@@ -58,3 +58,32 @@ type GenreRepository interface {
 	UpdateGenre(c context.Context, genreID int, g Genre) (Genre, error)
 	DeleteGenre(c context.Context, genreID int) (Genre, error)
 }
+
+type Age struct {
+	Id         uint   `json:"id" db:"id"`
+	Name       string `json:"name"`
+	Created_at string `json:"created_at"`
+	Deleted_at string `json:"deleted_at"`
+}
+
+type AgeRepository interface {
+	GetAllAges(c context.Context) ([]Age, error)
+	GetAgeByID(c context.Context, ageID int) (Age, error)
+	CreateAge(c context.Context, age Age) (int, error)
+	UpdateAge(c context.Context, ageID int, g Age) (Age, error)
+	DeleteAge(c context.Context, ageID int) (Age, error)
+}
+
+type Screenshot struct {
+	Id         uint   `json:"id" db:"id"`
+	Content_id int    `json:"content_id"`
+	Screen     string `json:"screen"`
+	Created_at string `json:"created_at"`
+	Deleted_at string `json:"deleted_at"`
+}
+
+type ScreenshotRepository interface {
+	GetScreenshotByID(c context.Context, screenshotID int) ([]Screenshot, error)
+	CreateScreenshot(c context.Context, screenshot Screenshot) (int, error)
+	DeleteScreenshot(c context.Context, screenshotID int) (Screenshot, error)
+}
