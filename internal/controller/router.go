@@ -44,6 +44,10 @@ func Setup(app pkg.Application, router *gin.Engine) {
 		ScreenshotRepository: repository.NewScreenshotRepository(db),
 	}
 
+	contentController := &core.ContentController{
+		ContentRepository: repository.NewContentRepository(db),
+	}
+
 	router.POST("/signup", loginController.Signup)
 	router.POST("/signin", loginController.Signin)
 
@@ -73,6 +77,13 @@ func Setup(app pkg.Application, router *gin.Engine) {
 		coreRouter.POST("/screenshot", screenshotController.CreateScreenshot)
 		coreRouter.GET("/screenshots/:screenshotID", screenshotController.GetScreenshotByID)
 		coreRouter.DELETE("/screenshots/:screenshotID", screenshotController.DeleteScreenshot)
+
+		coreRouter.POST("/content", contentController.CreateContent)
+		coreRouter.PUT("/content/:contentID", contentController.UpdateContent)
+		coreRouter.DELETE("/content/:contentID", contentController.DeleteContent)
+		coreRouter.GET("/content/:contentID", contentController.GetContentByID)
+		coreRouter.GET("/content/byGenre/:genreID", contentController.GetContentByGenre)
+		coreRouter.GET("/content/byTitle/:title", contentController.GetContentByTitle)
 	}
 
 }

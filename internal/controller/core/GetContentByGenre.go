@@ -1,23 +1,22 @@
 package core
 
 import (
+	"Ozinshe_restart/internal/models"
 	"net/http"
 	"strconv"
-
-	"Ozinshe_restart/internal/models"
 
 	"github.com/gin-gonic/gin"
 )
 
-func (ac *AgeController) DeleteAge(c *gin.Context) {
-	ageIDStr := c.Param("ageID")
-	ageID, err := strconv.Atoi(ageIDStr)
+func (cc *ContentController) GetContentByGenre(c *gin.Context) {
+	genreIDStr := c.Param("genreID")
+	genreID, err := strconv.Atoi(genreIDStr)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, models.ErrorResponse{
 			Result: []models.ErrorDetail{
 				{
-					Code:    "ERROR_INVALID_AGE_ID",
-					Message: "Invalid age ID",
+					Code:    "ERROR_INVALID_GENRE_ID",
+					Message: "Invalid content ID",
 					Metadata: models.Properties{
 						Properties1: err.Error(),
 					},
@@ -25,14 +24,13 @@ func (ac *AgeController) DeleteAge(c *gin.Context) {
 			},
 		})
 	}
-
-	_, err = ac.AgeRepository.DeleteAge(c, ageID)
+	contents, err := cc.ContentRepository.GetContentByGenre(c, genreID)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, models.ErrorResponse{
 			Result: []models.ErrorDetail{
 				{
-					Code:    "ERROR_DELETE_AGE",
-					Message: "Can't delete age",
+					Code:    "ERROR_GET_GENRE",
+					Message: "Can't get content from db",
 					Metadata: models.Properties{
 						Properties1: err.Error(),
 					},
@@ -41,5 +39,6 @@ func (ac *AgeController) DeleteAge(c *gin.Context) {
 		})
 		return
 	}
-	c.JSON(http.StatusOK, models.SuccessResponse{Result: "Age deleted succesfully"})
+
+	c.JSON(http.StatusOK, models.SuccessResponse{Result: contents})
 }

@@ -87,3 +87,30 @@ type ScreenshotRepository interface {
 	CreateScreenshot(c context.Context, screenshot Screenshot) (int, error)
 	DeleteScreenshot(c context.Context, screenshotID int) (Screenshot, error)
 }
+
+type Content struct {
+	Content_id   uint   `json:"content_id" db:"content_id"`
+	Title        string `json:"title"`
+	Description  string `json:"description"`
+	Release_year string `json:"release_year"`
+	Duration     string `json:"duration"`
+	Season       string `json:"season"`
+	Episode      string `json:"episode"`
+	Content_type string `json:"content_type"`
+	Director     string `json:"director"`
+	Producer     string `json:"producer"`
+	Genre_id     int    `json:"genre_id"`
+	Age_id       int    `json:"age_id"`
+	Created_at   string `json:"created_at"`
+	Deleted_at   string `json:"deleted_at"`
+}
+
+type ContentRepository interface {
+	GetAllContents(c context.Context) ([]Content, error)
+	GetContentByID(c context.Context, contentID int) (Content, error)
+	GetContentByGenre(c context.Context, genreID int) ([]Content, error)
+	GetContentByTitle(c context.Context, title string) ([]Content, error)
+	CreateContent(c context.Context, content Content) (int, error)
+	UpdateContent(c context.Context, contentID int, g Content) (Content, error)
+	DeleteContent(c context.Context, contentID int) (Content, error)
+}
